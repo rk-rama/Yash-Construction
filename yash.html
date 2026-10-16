@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yash Construction — Building Foundations, Delivering Trust</title>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif;background:#F8FAFC;color:#0F172A;margin:0}
+.fade{animation:f .35s ease}@keyframes f{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.hero{background:linear-gradient(120deg,rgba(15,23,42,.96),rgba(15,23,42,.8)),repeating-linear-gradient(45deg,#1e293b 0 12px,#0F172A 12px 24px)}
+input,select,textarea{border:1px solid #CBD5E1;border-radius:.5rem;padding:.55rem .75rem;width:100%;background:#fff;color:#0F172A}
+input:focus,select:focus,textarea:focus{outline:2px solid #F59E0B;border-color:#F59E0B}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useMemo}=React;
+const P={menu:"M4 6h16M4 12h16M4 18h16",x:"M18 6 6 18M6 6l12 12",plus:"M12 5v14M5 12h14",phone:"M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z",pin:"M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0zM12 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6z",search:"m21 21-4.3-4.3M11 3a8 8 0 1 0 0 16 8 8 0 0 0 0-16z",check:"M20 6 9 17l-5-5",lock:"M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4",arrow:"M5 12h14M13 6l6 6-6 6"};
+const Ic=({n,s=18,c=""})=><svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={c} aria-hidden="true"><path d={P[n]}/></svg>;
+
+/* ---------- mock data ---------- */
+const RATE={Mason:900,Helper:600,Carpenter:850,Painter:750,Welder:950,Plumber:800};
+const W0=[["Ramesh Kushwaha","98260 11122","Piplani, Bhopal","Mason"],["Sunil Yadav","98930 22334","Kolar Road, Bhopal","Helper"],["Mohd. Irfan","70002 45678","Karond, Bhopal","Carpenter"],["Dinesh Patel","94250 87654","Bairagarh, Bhopal","Painter"],["Kailash Meena","99771 33221","Ratibad, Bhopal","Mason"],["Arjun Singh","82690 55443","Misrod, Bhopal","Welder"]].map((w,i)=>({id:i+1,name:w[0],phone:w[1],addr:w[2],trade:w[3]}));
+const iso=d=>d.toISOString().slice(0,10);
+const TODAY=iso(new Date());
+const SH={Present:["09:00","17:00",8],Absent:["—","—",0],"Half-Day":["09:00","13:00",4],Overtime:["09:00","20:00",11]};
+const mkAtt=()=>{const a=[];let id=1;for(let d=0;d<30;d++){const dt=new Date();dt.setDate(dt.getDate()-d);W0.forEach(w=>{const h=(w.id*7+d*3)%11;const s=h<6?"Present":h<8?"Overtime":h<9?"Half-Day":"Absent";a.push({id:id++,wid:w.id,date:iso(dt),status:s})})}return a};
+const E0=[{id:1,name:"Anil Sharma",phone:"98270 44556",site:"Greenview Villas, Kolar",cert:"ITI Certified · 12 yrs"},{id:2,name:"Rakesh Tiwari",phone:"94250 66778",site:"Sapphire Commercial Plaza",cert:"Licensed Wireman · 8 yrs"},{id:3,name:"Salman Khan",phone:"79870 12345",site:"Lotus Apartments, Bairagarh",cert:"HT/LT Certified · 15 yrs"}];
+const T0=[["Heavy Duty Hammer Drill","YC-HD-101","Anil Sharma","2026-10-08","2026-10-20","Working"],["Angle Grinder 4\"","YC-AG-204","Rakesh Tiwari","2026-10-10","2026-10-18","Working"],["Conduit Bender","YC-CB-033","Salman Khan","2026-10-01","2026-10-14","Under Maintenance"],["Insulation Tester","YC-IT-019","Anil Sharma","2026-10-12","2026-10-25","Working"],["Cable Puller","YC-CP-077","Rakesh Tiwari","2026-09-28","2026-10-12","Damaged"]].map((t,i)=>({id:i+1,tool:t[0],sn:t[1],by:t[2],issue:t[3],ret:t[4],cond:t[5]}));
+const C0=[["Mr. Verma","Kolar Road, Bhopal",8500000,2500000,"2026-04-01","2026-12-20",72],["Sharma Developers","Bairagarh, Bhopal",42000000,15000000,"2026-02-15","2027-03-30",48],["Dr. Khan","Shahpura, Bhopal",3200000,3200000,"2026-06-10","2026-11-10",91],["Lotus Realty","Misrod, Bhopal",120000000,40000000,"2026-01-05","2027-08-15",35]].map((c,i)=>({id:i+1,client:c[0],site:c[1],total:c[2],adv:c[3],start:c[4],due:c[5],pct:c[6]}));
+const inr=n=>n>=1e7?`₹${(n/1e7).toFixed(2)} Cr`:`₹${(n/1e5).toFixed(1)} L`;
+const fmtD=d=>new Date(d).toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+
+/* ---------- shared UI ---------- */
+const Btn=({v="p",...p})=><button {...p} className={`inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 font-semibold transition active:scale-95 ${v==="p"?"bg-amber-500 text-slate-900 hover:bg-amber-400":v==="d"?"bg-slate-900 text-white hover:bg-slate-700":"border border-white/40 text-white hover:bg-white/10"} ${p.className||""}`}/>;
+const Lbl=({l,children})=><label className="block text-sm font-medium text-slate-700">{l}<div className="mt-1">{children}</div></label>;
+const Card=({children,className=""})=><div className={`bg-white border border-slate-200 rounded-xl shadow-sm ${className}`}>{children}</div>;
+const Title=({k,t,s})=><div className="mb-8"><p className="text-amber-600 font-bold text-sm tracking-widest uppercase">{k}</p><h2 className="text-3xl md:text-4xl font-extrabold mt-1">{t}</h2>{s&&<p className="text-slate-600 mt-2 max-w-2xl">{s}</p>}</div>;
+const Stat=({l,v,sub})=><Card className="p-4 border-l-4 !border-l-amber-500"><p className="text-xs uppercase tracking-wide text-slate-500 font-semibold">{l}</p><p className="text-2xl font-extrabold mt-1">{v}</p>{sub&&<p className="text-xs text-slate-500">{sub}</p>}</Card>;
+const Pill=({t})=>{const m={Working:"bg-emerald-100 text-emerald-800",Present:"bg-emerald-100 text-emerald-800","Under Maintenance":"bg-amber-100 text-amber-900",Overtime:"bg-blue-100 text-blue-800","Half-Day":"bg-amber-100 text-amber-900",Damaged:"bg-red-100 text-red-800",Absent:"bg-red-100 text-red-800"};return <span className={`px-2 py-0.5 rounded-full text-xs font-semibold ${m[t]||"bg-slate-100"}`}>{t}</span>};
+const Table=({head,children})=><div className="overflow-x-auto"><table className="w-full text-sm text-left"><thead className="bg-slate-50 text-slate-600"><tr>{head.map(h=><th key={h} className="px-4 py-3 font-semibold whitespace-nowrap">{h}</th>)}</tr></thead><tbody className="divide-y divide-slate-100">{children}</tbody></table></div>;
+const Td=p=><td className="px-4 py-3 whitespace-nowrap" {...p}/>;
+
+function Modal({title,fields,onClose,onSave}){
+  const [f,setF]=useState(()=>Object.fromEntries(fields.map(x=>[x.k,x.opts?x.opts[0]:x.def||""])));
+  return <div className="fixed inset-0 z-50 bg-slate-900/70 flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-label={title} onClick={onClose}>
+    <div className="bg-white rounded-2xl w-full max-w-md p-6 fade max-h-[90vh] overflow-y-auto" onClick={e=>e.stopPropagation()}>
+      <div className="flex justify-between items-center mb-4"><h3 className="text-xl font-bold">{title}</h3><button onClick={onClose} aria-label="Close"><Ic n="x"/></button></div>
+      <div onKeyDown={e=>e.key==="Escape"&&onClose()} className="space-y-3">
+        {fields.map(x=><Lbl key={x.k} l={x.l}>{x.opts?<select value={f[x.k]} onChange={e=>setF({...f,[x.k]:e.target.value})}>{x.opts.map(o=><option key={o}>{o}</option>)}</select>:<input type={x.t||"text"} value={f[x.k]} onChange={e=>setF({...f,[x.k]:e.target.value})}/>}</Lbl>)}
+        <Btn className="w-full mt-2" onClick={()=>{if(fields.every(x=>x.opt||f[x.k])){onSave(f);onClose()}else alert("Please fill all fields")}}>Save</Btn>
+      </div>
+    </div></div>;
+}
+
+/* ---------- public pages ---------- */
+const SERV=[["Residential Construction","Villas, bungalows & apartments built to RCC standards with premium finishing."],["Commercial Building","Offices, showrooms & retail complexes delivered on schedule."],["Interior Fit-outs","Turnkey interiors: false ceilings, modular woodwork, electricals."],["Renovation & Remodeling","Structural upgrades, waterproofing and complete makeovers."],["Structural Engineering","Design, load analysis & site supervision by qualified engineers."]];
+const PROJ=[["Greenview Villas","Residential","Kolar Road","Ongoing",72],["Sapphire Commercial Plaza","Commercial","Bairagarh","Ongoing",48],["Lotus Apartments","Residential","Misrod","Ongoing",35],["Khan Residence","Residential","Shahpura","Completed",100],["Orbit Business Hub","Commercial","MP Nagar","Completed",100],["Heritage Cafe Fit-out","Interior","Arera Colony","Completed",100]];
+const PKG=[["Residential Home","₹35 L – ₹1.2 Cr","6–12 Months","M25 concrete, Fe500D steel, branded fittings","Foundation 15% · Structure 40% · Finishing 30% · Electrical/Plumbing 15%"],["Commercial Building","₹1.5 Cr – ₹15 Cr","12–24 Months","M30 concrete, Fe550 steel, ACP façade","Foundation 18% · Structure 45% · MEP 22% · Finishing 15%"],["Interior Fit-out","₹8 L – ₹80 L","2–5 Months","BWP ply, Italian finish, LED systems","Design 8% · Woodwork 45% · Electricals 20% · Finishing 27%"],["Renovation","₹4 L – ₹50 L","1–4 Months","Waterproof chemicals, vitrified tiles","Demolition 10% · Repairs 35% · Finishing 40% · Cleanup 15%"]];
+
+function Home({go}){return <div className="fade">
+  <section className="hero text-white"><div className="max-w-6xl mx-auto px-4 py-20 md:py-32">
+    <p className="inline-block border border-amber-500/60 text-amber-400 px-3 py-1 rounded-full text-sm font-semibold">Bhopal's trusted builders</p>
+    <h1 className="text-4xl md:text-6xl font-extrabold mt-5 leading-tight max-w-3xl">Building Foundations,<br/><span className="text-amber-500">Delivering Trust.</span></h1>
+    <p className="mt-5 text-slate-300 max-w-xl text-lg">End-to-end construction, interiors and engineering across Madhya Pradesh — on time, on budget, built to last.</p>
+    <div className="flex flex-wrap gap-3 mt-8"><Btn onClick={()=>go("contracts")}>Get Project Estimate <Ic n="arrow"/></Btn><Btn v="o" onClick={()=>go("projects")}>View Portfolio</Btn></div>
+    <div className="grid grid-cols-3 gap-4 mt-14 max-w-2xl">{[["15+","Years Experience"],["200+","Projects Completed"],["100%","Quality Guaranteed"]].map(([a,b])=><div key={b} className="border-l-2 border-amber-500 pl-3"><p className="text-3xl md:text-4xl font-extrabold">{a}</p><p className="text-xs md:text-sm text-slate-400">{b}</p></div>)}</div>
+  </div></section>
+  <Services/>
+</div>}
+function Services(){return <section className="max-w-6xl mx-auto px-4 py-16"><Title k="What we do" t="Services & Expertise" s="Five core disciplines under one roof — one team accountable from design to handover."/>
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">{SERV.map(([t,d],i)=><Card key={t} className="p-6 hover:-translate-y-1 hover:shadow-lg transition"><div className="w-11 h-11 rounded-lg bg-slate-900 text-amber-500 grid place-items-center font-extrabold">0{i+1}</div><h3 className="font-bold text-lg mt-4">{t}</h3><p className="text-slate-600 text-sm mt-2">{d}</p></Card>)}</div></section>}
+function Projects(){const [f,setF]=useState("All");const L=PROJ.filter(p=>f==="All"||p[3]===f);
+  return <section className="max-w-6xl mx-auto px-4 py-16 fade"><Title k="Portfolio" t="Ongoing & Completed Projects"/>
+  <div className="flex gap-2 mb-6">{["All","Ongoing","Completed"].map(x=><button key={x} onClick={()=>setF(x)} className={`px-4 py-1.5 rounded-full text-sm font-semibold border ${f===x?"bg-slate-900 text-white border-slate-900":"bg-white border-slate-300"}`}>{x}</button>)}</div>
+  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">{L.map(p=><Card key={p[0]} className="overflow-hidden"><div className="h-32 hero grid place-items-center text-amber-500 font-extrabold text-xl">{p[1]}</div><div className="p-5"><div className="flex justify-between items-start"><h3 className="font-bold">{p[0]}</h3><Pill t={p[3]==="Ongoing"?"Working":"Present"}/></div><p className="text-sm text-slate-500 mt-1 flex items-center gap-1"><Ic n="pin" s={14}/>{p[2]}, Bhopal</p><div className="mt-4 h-2 bg-slate-100 rounded"><div className="h-2 bg-amber-500 rounded" style={{width:p[4]+"%"}}/></div><p className="text-xs text-slate-500 mt-1">{p[4]}% {p[3]==="Completed"?"· Handed over":"complete"}</p></div></Card>)}</div></section>}
+
+function Contracts(){const [ok,setOk]=useState(false);const [f,setF]=useState({name:"",phone:"",site:"",type:PKG[0][0],time:"",budget:""});
+  const sub=e=>{e.preventDefault();setOk(true)};
+  return <section className="max-w-6xl mx-auto px-4 py-16 fade"><Title k="Client Portal" t="Contracts & Estimations" s="Transparent pricing packages. Pick a type, send your requirements, and we'll respond with a detailed estimate within 24 hours."/>
+  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">{PKG.map(p=><Card key={p[0]} className="p-5 flex flex-col"><h3 className="font-bold">{p[0]}</h3><p className="text-2xl font-extrabold text-amber-600 mt-2">{p[1]}</p><dl className="text-sm mt-3 space-y-2 text-slate-600 flex-1"><div><dt className="font-semibold text-slate-900">Duration</dt><dd>{p[2]}</dd></div><div><dt className="font-semibold text-slate-900">Material Grade</dt><dd>{p[3]}</dd></div><div><dt className="font-semibold text-slate-900">Budget Breakdown</dt><dd>{p[4]}</dd></div></dl><Btn v="d" className="mt-4" onClick={()=>{setF({...f,type:p[0]});document.getElementById("quote").scrollIntoView({behavior:"smooth"})}}>Request this</Btn></Card>)}</div>
+  <Card className="p-6 md:p-8 mt-10 max-w-3xl" ><h3 id="quote" className="text-xl font-bold mb-4">Request a Quote / Contract</h3>
+  {ok?<div className="text-center py-8"><div className="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-700 grid place-items-center"><Ic n="check" s={28}/></div><p className="font-bold text-lg mt-3">Thank you, {f.name}!</p><p className="text-slate-600">Our team will call you on {f.phone} shortly.</p><Btn className="mt-4" onClick={()=>setOk(false)}>New request</Btn></div>:
+  <form onSubmit={sub} className="grid sm:grid-cols-2 gap-4"><Lbl l="Client Name"><input required value={f.name} onChange={e=>setF({...f,name:e.target.value})}/></Lbl><Lbl l="Phone"><input required type="tel" value={f.phone} onChange={e=>setF({...f,phone:e.target.value})}/></Lbl><div className="sm:col-span-2"><Lbl l="Site Address"><input required value={f.site} onChange={e=>setF({...f,site:e.target.value})}/></Lbl></div><Lbl l="Project Type"><select value={f.type} onChange={e=>setF({...f,type:e.target.value})}>{PKG.map(p=><option key={p[0]}>{p[0]}</option>)}</select></Lbl><Lbl l="Expected Timeline"><select required value={f.time} onChange={e=>setF({...f,time:e.target.value})}><option value="">Select…</option><option>Under 3 months</option><option>3–6 months</option><option>6–12 months</option><option>12+ months</option></select></Lbl><div className="sm:col-span-2"><Lbl l="Estimated Budget (₹)"><input required value={f.budget} placeholder="e.g. 45,00,000" onChange={e=>setF({...f,budget:e.target.value})}/></Lbl></div><Btn className="sm:col-span-2">Submit Request</Btn></form>}</Card></section>}
+
+function Contact(){const [ok,setOk]=useState(false);return <section className="max-w-6xl mx-auto px-4 py-16 fade"><Title k="Reach us" t="Contact & Inquiry"/>
+  <div className="grid md:grid-cols-2 gap-6"><div className="space-y-4"><Card className="p-5 flex gap-3"><Ic n="pin" c="text-amber-600 mt-1"/><div><p className="font-bold">Bima Kunj, Kolar Road, Bhopal</p><p className="text-sm text-slate-600">Madhya Pradesh, India</p></div></Card><Card className="p-5 flex gap-3"><Ic n="phone" c="text-amber-600 mt-1"/><div><p className="font-bold">+91 98XXX XXXXX</p><p className="text-sm text-slate-600">Mon–Sat, 9:00 AM – 7:00 PM</p></div></Card>
+  <div className="h-56 rounded-xl border-2 border-dashed border-slate-300 bg-slate-100 grid place-items-center text-slate-500 text-sm text-center px-4"><div><Ic n="pin" s={28} c="mx-auto mb-2"/>Google Map placeholder<br/>Bima Kunj, Kolar Road, Bhopal</div></div></div>
+  <Card className="p-6">{ok?<p className="font-semibold text-emerald-700 py-10 text-center">Message sent. We'll get back to you soon.</p>:<form onSubmit={e=>{e.preventDefault();setOk(true)}} className="space-y-3"><Lbl l="Name"><input required/></Lbl><Lbl l="Email / Phone"><input required/></Lbl><Lbl l="Message"><textarea required rows="4"/></Lbl><Btn className="w-full">Send Inquiry</Btn></form>}</Card></div></section>}
+
+/* ---------- internal portal ---------- */
+function Workers({workers,setWorkers,att,setAtt}){
+  const [per,setPer]=useState("Daily"),[q,setQ]=useState(""),[m,setM]=useState(false);
+  const wm=useMemo(()=>Object.fromEntries(workers.map(w=>[w.id,w])),[workers]);
+  const days=per==="Daily"?1:per==="Weekly"?7:30;
+  const cut=iso(new Date(Date.now()-(days-1)*864e5));
+  const rows=att.filter(a=>a.date>=cut&&wm[a.wid]&&(wm[a.wid].name+wm[a.wid].trade).toLowerCase().includes(q.toLowerCase())).sort((a,b)=>b.date.localeCompare(a.date));
+  const todayRows=att.filter(a=>a.date===TODAY);
+  const onSite=todayRows.filter(a=>a.status!=="Absent").length;
+  const ot=rows.filter(a=>a.status==="Overtime").reduce((s,a)=>s+3,0);
+  const wage=att.filter(a=>a.date>=iso(new Date(Date.now()-29*864e5))).reduce((s,a)=>s+(wm[a.wid]?RATE[wm[a.wid].trade]*SH[a.status][2]/8:0),0);
+  const add=f=>{const id=Math.max(0,...workers.map(w=>w.id))+1;setWorkers([...workers,{id,...f}]);setAtt([...att,...Array.from({length:30},(_,d)=>({id:Date.now()+d,wid:id,date:iso(new Date(Date.now()-d*864e5)),status:d===0?"Present":"Absent"}))])};
+  return <div className="space-y-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4"><Stat l="Laborers on Site Today" v={`${onSite}/${workers.length}`}/><Stat l={`Overtime Hrs (${per})`} v={ot}/><Stat l="Monthly Wage Estimate" v={"₹"+Math.round(wage).toLocaleString("en-IN")} sub="Last 30 days"/><Stat l="Registered Workers" v={workers.length}/></div>
+    <Card><div className="p-4 flex justify-between items-center border-b border-slate-200"><h3 className="font-bold">Worker Profiles</h3><Btn onClick={()=>setM(true)} className="!py-1.5 text-sm"><Ic n="plus" s={16}/>Add Worker</Btn></div>
+      <Table head={["Name","Mobile","Permanent Address","Trade","Daily Rate"]}>{workers.map(w=><tr key={w.id}><Td className="px-4 py-3 font-semibold">{w.name}</Td><Td>{w.phone}</Td><Td>{w.addr}</Td><Td>{w.trade}</Td><Td>₹{RATE[w.trade]}</Td></tr>)}</Table></Card>
+    <Card><div className="p-4 flex flex-wrap gap-3 justify-between items-center border-b border-slate-200"><h3 className="font-bold">Attendance Tracker</h3>
+      <div className="flex gap-2 flex-wrap"><div className="relative"><span className="absolute left-2.5 top-3 text-slate-400"><Ic n="search" s={16}/></span><input aria-label="Search" className="!pl-8 !py-1.5" placeholder="Search worker / trade" value={q} onChange={e=>setQ(e.target.value)}/></div>
+      <div className="flex rounded-lg overflow-hidden border border-slate-300">{["Daily","Weekly","Monthly"].map(x=><button key={x} onClick={()=>setPer(x)} className={`px-3 py-1.5 text-sm font-semibold ${per===x?"bg-slate-900 text-white":"bg-white"}`}>{x}</button>)}</div></div></div>
+      <div className="max-h-96 overflow-y-auto"><Table head={["Date","Worker","Shift In","Shift Out","Hours","Status"]}>{rows.slice(0,120).map(a=>{const s=SH[a.status];return <tr key={a.id}><Td>{fmtD(a.date)}</Td><Td className="px-4 py-3 font-semibold">{wm[a.wid].name}<span className="text-slate-400 font-normal"> · {wm[a.wid].trade}</span></Td><Td>{s[0]}</Td><Td>{s[1]}</Td><Td>{s[2]}h</Td><Td><select aria-label="Status" className="!w-auto !py-1 !px-2 text-xs" value={a.status} onChange={e=>setAtt(att.map(x=>x.id===a.id?{...x,status:e.target.value}:x))}>{Object.keys(SH).map(o=><option key={o}>{o}</option>)}</select> <Pill t={a.status}/></Td></tr>})}{!rows.length&&<tr><Td colSpan="6">No records found.</Td></tr>}</Table></div></Card>
+    {m&&<Modal title="Add Worker" onClose={()=>setM(false)} onSave={add} fields={[{k:"name",l:"Worker Name"},{k:"phone",l:"Mobile Number",t:"tel"},{k:"addr",l:"Permanent Address"},{k:"trade",l:"Trade / Category",opts:Object.keys(RATE)}]}/>}
+  </div>}
+
+function Tools({elec,setElec,tools,setTools}){
+  const [q,setQ]=useState(""),[m,setM]=useState(null);
+  const L=tools.filter(t=>(t.tool+t.sn+t.by).toLowerCase().includes(q.toLowerCase()));
+  return <div className="space-y-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4"><Stat l="Electricians" v={elec.length}/><Stat l="Tools Issued" v={tools.length}/><Stat l="Under Maintenance" v={tools.filter(t=>t.cond==="Under Maintenance").length}/><Stat l="Damaged" v={tools.filter(t=>t.cond==="Damaged").length}/></div>
+    <Card><div className="p-4 flex justify-between items-center border-b border-slate-200"><h3 className="font-bold">Electrician Directory</h3><Btn className="!py-1.5 text-sm" onClick={()=>setM("e")}><Ic n="plus" s={16}/>Add Electrician</Btn></div>
+      <Table head={["Name","Phone","Assigned Site","Certification / Experience"]}>{elec.map(e=><tr key={e.id}><Td className="px-4 py-3 font-semibold">{e.name}</Td><Td>{e.phone}</Td><Td>{e.site}</Td><Td>{e.cert}</Td></tr>)}</Table></Card>
+    <Card><div className="p-4 flex flex-wrap gap-3 justify-between items-center border-b border-slate-200"><h3 className="font-bold">Tool & Equipment Allocation</h3><div className="flex gap-2"><input aria-label="Search tools" className="!py-1.5" placeholder="Search tool / ID / name" value={q} onChange={e=>setQ(e.target.value)}/><Btn className="!py-1.5 text-sm" onClick={()=>setM("t")}><Ic n="plus" s={16}/>Issue Tool</Btn></div></div>
+      <Table head={["Tool","Serial No.","Checked-out By","Issue Date","Expected Return","Condition"]}>{L.map(t=><tr key={t.id}><Td className="px-4 py-3 font-semibold">{t.tool}</Td><Td>{t.sn}</Td><Td>{t.by}</Td><Td>{fmtD(t.issue)}</Td><Td>{fmtD(t.ret)}</Td><Td><select aria-label="Condition" className="!w-auto !py-1 !px-2 text-xs" value={t.cond} onChange={e=>setTools(tools.map(x=>x.id===t.id?{...x,cond:e.target.value}:x))}>{["Working","Under Maintenance","Damaged"].map(o=><option key={o}>{o}</option>)}</select> <Pill t={t.cond}/></Td></tr>)}{!L.length&&<tr><Td colSpan="6">No tools found.</Td></tr>}</Table></Card>
+    {m==="e"&&<Modal title="Add Electrician" onClose={()=>setM(null)} onSave={f=>setElec([...elec,{id:Date.now(),...f}])} fields={[{k:"name",l:"Name"},{k:"phone",l:"Phone",t:"tel"},{k:"site",l:"Assigned Project Site"},{k:"cert",l:"Certification / Experience"}]}/>}
+    {m==="t"&&<Modal title="Issue Tool" onClose={()=>setM(null)} onSave={f=>setTools([...tools,{id:Date.now(),...f}])} fields={[{k:"tool",l:"Tool Name"},{k:"sn",l:"Tool ID / Serial No."},{k:"by",l:"Checked-out By",opts:elec.map(e=>e.name)},{k:"issue",l:"Issue Date",t:"date",def:TODAY},{k:"ret",l:"Expected Return Date",t:"date"},{k:"cond",l:"Condition",opts:["Working","Under Maintenance","Damaged"]}]}/>}
+  </div>}
+
+function ContractsTab({list,setList}){
+  const [m,setM]=useState(false);const tot=list.reduce((s,c)=>s+c.total,0),adv=list.reduce((s,c)=>s+c.adv,0);
+  return <div className="space-y-6"><div className="grid grid-cols-2 lg:grid-cols-4 gap-4"><Stat l="Active Contracts" v={list.length}/><Stat l="Portfolio Value" v={inr(tot)}/><Stat l="Advance Received" v={inr(adv)}/><Stat l="Balance Due" v={inr(tot-adv)}/></div>
+  <Card><div className="p-4 flex justify-between items-center border-b border-slate-200"><h3 className="font-bold">Active Contracts</h3><Btn className="!py-1.5 text-sm" onClick={()=>setM(true)}><Ic n="plus" s={16}/>Add Contract</Btn></div>
+  <Table head={["Client","Site","Contract Value","Advance","Balance","Start","Deadline","Progress"]}>{list.map(c=><tr key={c.id}><Td className="px-4 py-3 font-semibold">{c.client}</Td><Td>{c.site}</Td><Td>{inr(c.total)}</Td><Td>{inr(c.adv)}</Td><Td className="px-4 py-3 font-semibold text-red-700">{inr(c.total-c.adv)}</Td><Td>{fmtD(c.start)}</Td><Td>{fmtD(c.due)}</Td><Td><div className="flex items-center gap-2 min-w-[140px]"><div className="flex-1 h-2 bg-slate-100 rounded"><div className="h-2 bg-amber-500 rounded" style={{width:c.pct+"%"}}/></div><span className="text-xs font-semibold">{c.pct}%</span></div></Td></tr>)}</Table></Card>
+  {m&&<Modal title="Add Contract" onClose={()=>setM(false)} onSave={f=>setList([...list,{id:Date.now(),client:f.client,site:f.site,total:+f.total*1e5,adv:+f.adv*1e5,start:f.start,due:f.due,pct:+f.pct}])} fields={[{k:"client",l:"Client Name"},{k:"site",l:"Site Location"},{k:"total",l:"Total Value (₹ Lakhs)",t:"number"},{k:"adv",l:"Advance Paid (₹ Lakhs)",t:"number"},{k:"start",l:"Start Date",t:"date"},{k:"due",l:"Delivery Deadline",t:"date"},{k:"pct",l:"Progress %",t:"number"}]}/>}</div>}
+
+function Portal(){
+  const [auth,setAuth]=useState(false),[pw,setPw]=useState(""),[err,setErr]=useState(false),[tab,setTab]=useState("labor");
+  const [workers,setWorkers]=useState(W0),[att,setAtt]=useState(mkAtt),[elec,setElec]=useState(E0),[tools,setTools]=useState(T0),[cons,setCons]=useState(C0);
+  if(!auth)return <section className="max-w-md mx-auto px-4 py-24 fade"><Card className="p-8 text-center"><div className="w-14 h-14 rounded-full bg-slate-900 text-amber-500 grid place-items-center mx-auto"><Ic n="lock" s={26}/></div><h2 className="text-2xl font-extrabold mt-4">Internal Operations Portal</h2><p className="text-slate-600 text-sm mt-1">Authorised staff only.</p>
+    <form className="mt-5 space-y-3 text-left" onSubmit={e=>{e.preventDefault();pw==="yash123"?setAuth(true):setErr(true)}}><Lbl l="Password"><input type="password" value={pw} onChange={e=>{setPw(e.target.value);setErr(false)}} autoFocus/></Lbl>{err&&<p className="text-red-700 text-sm" role="alert">Incorrect password.</p>}<Btn className="w-full">Unlock Portal</Btn></form><p className="text-xs text-slate-500 mt-4">Demo password: <code className="bg-slate-100 px-1 rounded">yash123</code></p></Card></section>;
+  const T=[["labor","Labor & Attendance"],["tools","Electricians & Tools"],["cons","Contracts Tracker"]];
+  return <section className="max-w-6xl mx-auto px-4 py-10 fade"><div className="flex flex-wrap justify-between items-end gap-3 mb-6"><div><p className="text-amber-600 font-bold text-sm tracking-widest uppercase">Admin Dashboard</p><h2 className="text-3xl font-extrabold">Operations Portal</h2></div><button className="text-sm underline text-slate-600" onClick={()=>{setAuth(false);setPw("")}}>Lock</button></div>
+  <div className="flex gap-2 overflow-x-auto mb-6" role="tablist">{T.map(([k,l])=><button role="tab" aria-selected={tab===k} key={k} onClick={()=>setTab(k)} className={`px-4 py-2 rounded-lg font-semibold text-sm whitespace-nowrap ${tab===k?"bg-slate-900 text-white":"bg-white border border-slate-300"}`}>{l}</button>)}</div>
+  {tab==="labor"&&<Workers {...{workers,setWorkers,att,setAtt}}/>}{tab==="tools"&&<Tools {...{elec,setElec,tools,setTools}}/>}{tab==="cons"&&<ContractsTab list={cons} setList={setCons}/>}</section>}
+
+/* ---------- shell ---------- */
+function App(){
+  const [pg,setPg]=useState("home"),[open,setOpen]=useState(false);
+  const go=p=>{setPg(p);setOpen(false);window.scrollTo({top:0,behavior:"smooth"})};
+  const N=[["home","Home"],["services","Services"],["projects","Projects"],["contracts","Contracts"],["portal","Ops Portal"],["contact","Contact"]];
+  return <div className="min-h-screen flex flex-col">
+    <header className="sticky top-0 z-40 bg-slate-900 text-white shadow-lg" style={{paddingTop:"env(safe-area-inset-top,0px)"}}><div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <button onClick={()=>go("home")} className="flex items-center gap-2 font-extrabold text-lg"><span className="w-9 h-9 bg-amber-500 text-slate-900 grid place-items-center rounded-lg">Y</span>YASH <span className="text-amber-500">CONSTRUCTION</span></button>
+      <nav className="hidden md:flex gap-1" aria-label="Main">{N.map(([k,l])=><button key={k} onClick={()=>go(k)} className={`px-3 py-2 rounded-md text-sm font-semibold transition ${pg===k?"bg-amber-500 text-slate-900":"hover:bg-white/10"}`}>{l}</button>)}</nav>
+      <button className="md:hidden" aria-label="Menu" onClick={()=>setOpen(!open)}><Ic n={open?"x":"menu"} s={26}/></button></div>
+      {open&&<nav className="md:hidden border-t border-white/10 px-4 py-2 fade">{N.map(([k,l])=><button key={k} onClick={()=>go(k)} className={`block w-full text-left px-3 py-3 rounded-md font-semibold ${pg===k?"text-amber-500":""}`}>{l}</button>)}</nav>}</header>
+    <main className="flex-1">{pg==="home"&&<Home go={go}/>}{pg==="services"&&<div className="fade"><Services/></div>}{pg==="projects"&&<Projects/>}{pg==="contracts"&&<Contracts/>}{pg==="portal"&&<Portal/>}{pg==="contact"&&<Contact/>}</main>
+    <footer className="bg-slate-900 text-slate-400 text-sm"><div className="max-w-6xl mx-auto px-4 py-8 flex flex-wrap justify-between gap-3"><p><b className="text-white">Yash Construction</b> · Bima Kunj, Kolar Road, Bhopal, Madhya Pradesh</p><p>Building Foundations, Delivering Trust · © 2026</p></div></footer>
+  </div>}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
